@@ -11,6 +11,8 @@ import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRat
 import java.io.IOException;
 import java.util.Set;
 
+import static java.lang.String.format;
+
 @Service
 @RequiredArgsConstructor
 public class ExchangeRateApiService
@@ -25,13 +27,13 @@ public class ExchangeRateApiService
         {
             throw new ApiMalformedRequestException("Base currency symbol cannot be empty");
         }
-        if("USD".equals(baseCurrencySymbol))
+        else if ("USD".equals(baseCurrencySymbol))
         {
             return JsonHandler.deserializeFromJson(resourceReader.readResource(USD_LATEST_RESPONSE_PATH, ExchangeRateEndpointsApplication.class), LatestCurrencyExchangeRatesResponse.class);
         }
         else
         {
-            throw new ApiMalformedRequestException(String.format("Base currency symbol [%s] is not implemented in the mock data control flow. Implement it or change the request.", baseCurrencySymbol));
+            throw new ApiMalformedRequestException(format("Base currency symbol [%s] is not implemented in the mock data control flow. Implement it or change the request.", baseCurrencySymbol));
         }
     }
 }
