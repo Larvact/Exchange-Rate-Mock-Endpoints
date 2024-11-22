@@ -19,7 +19,7 @@ public class ExchangeRateApiResource
     private final ExchangeRateApiService exchangeRateApiService;
 
     @GetMapping(path = "/latest")
-    public LatestCurrencyExchangeRatesResponse getLatestCurrencyExchangeRate(@RequestParam(name = "base") String baseCurrencySymbol, @RequestParam(name = "symbols") Set<String> responseCurrencySymbols) throws IOException
+    public LatestCurrencyExchangeRatesResponse getLatestCurrencyExchangeRate(@RequestParam(name = "base") final String baseCurrencySymbol, @RequestParam(name = "symbols") final Set<String> responseCurrencySymbols) throws IOException
     {
         return exchangeRateApiService.getLatestCurrencyExchangeRatesResponse(baseCurrencySymbol, responseCurrencySymbols);
     }
