@@ -21,7 +21,7 @@ public class ExchangeRateApiService
 
     public LatestCurrencyExchangeRatesResponse getLatestCurrencyExchangeRatesResponse(final String baseCurrencySymbol, final Set<String> responseCurrencySymbols) throws IOException
     {
-        if(baseCurrencySymbol.isBlank())
+        if(baseCurrencySymbol == null || baseCurrencySymbol.isBlank())
         {
             throw new ApiMalformedRequestException("Base currency symbol cannot be empty");
         }
