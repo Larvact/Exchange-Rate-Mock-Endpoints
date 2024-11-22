@@ -1,11 +1,10 @@
 package toby.exchangerate.endpoints;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import toby.exchangerate.ResourceReader;
-import toby.exchangerate.ExchangeRateEndpointsApplication;
-import toby.exchangerate.common.exception.api.ApiMalformedRequestException;
-import toby.exchangerate.json.JsonHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRatesResponse;
 import toby.exchangerate.services.ExchangeRateApiService;
 
