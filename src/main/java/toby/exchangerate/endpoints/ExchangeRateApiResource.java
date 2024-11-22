@@ -6,35 +6,22 @@ import toby.exchangerate.ResourceReader;
 import toby.exchangerate.ExchangeRateEndpointsApplication;
 import toby.exchangerate.common.exception.api.ApiMalformedRequestException;
 import toby.exchangerate.json.JsonHandler;
-import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRatesRequest;
 import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRatesResponse;
+import toby.exchangerate.services.ExchangeRateApiService;
 
 import java.io.IOException;
-import static toby.exchangerate.common.data.DataTransformationUtils.orElse;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "v1")
 @RequiredArgsConstructor
 public class ExchangeRateApiResource
 {
-    private static final String USD_LATEST_RESPONSE_PATH = "/mockresponse/exchangerateapi/latest/usdResponse.json";
-    private final ResourceReader resourceReader;
+    private final ExchangeRateApiService exchangeRateApiService;
 
-    @PostMapping(path = "/latest")
-    public LatestCurrencyExchangeRatesResponse getLatestCurrencyExchangeRate(@RequestBody final LatestCurrencyExchangeRatesRequest latestCurrencyExchangeRatesRequest) throws IOException
+    @GetMapping(path = "/latest")
+    public LatestCurrencyExchangeRatesResponse getLatestCurrencyExchangeRate(@RequestParam(name = "base") String baseCurrencySymbol, @RequestParam(name = "symbols") Set<String> responseCurrencySymbols) throws IOException
     {
-        if(!orElse(latestCurrencyExchangeRatesRequest, request -> orElse(request.getBaseCurrencySymbol(), symbol -> !symbol.isBlank(), false), false))
-        {
-            throw new ApiMalformedRequestException("Base currency symbol cannot be empty");
-        }
-        final var baseCurrencySymbol = latestCurrencyExchangeRatesRequest.getBaseCurrencySymbol();
-        if("USD".equals(baseCurrencySymbol))
-        {
-            return JsonHandler.deserializeFromJson(resourceReader.readResource(USD_LATEST_RESPONSE_PATH, ExchangeRateEndpointsApplication.class), LatestCurrencyExchangeRatesResponse.class);
-        }
-        else
-        {
-            throw new ApiMalformedRequestException(String.format("Base currency symbol [%s] is not implemented in the mock data control flow. Implement it or change the request.", baseCurrencySymbol));
-        }
+        return exchangeRateApiService.getLatestCurrencyExchangeRatesResponse(baseCurrencySymbol, responseCurrencySymbols);
     }
 }
